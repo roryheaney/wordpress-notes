@@ -1,0 +1,45 @@
+<article class="module article" id="discover-press" data-border-color="<?php echo substr(get_field('border_color'), 1); ?>" data-color-primary="<?php echo substr(get_field('primary_color'), 1); ?>" data-color-secondary="<?php echo substr(get_field('secondary_color'), 1); ?>" data-path="<?php the_permalink(); ?>">
+  <div class="inner content-with-nav-dynamic">
+    <h2><?php the_title(); ?></h2>
+    <div class="nav">
+      <ul id="tricky">
+        <?php
+        $rows = get_field('press');
+        if ($rows) {
+          $i = 0;
+          foreach ($rows as $row) {
+            $i++;
+        ?>
+        <li><a href="#<?php echo ereg_replace("[^A-Za-z0-9\-]", "", str_replace(' ', '-', $row['title'])) . '-' . $i; ?>"><?php echo $row['title']; ?></a></li>
+        <?php
+          }
+        }
+        ?>
+      </ul>
+    </div>
+    <div class="content">
+      <?php
+      if ($rows) {
+        $i = 0;
+        foreach ($rows as $row) {
+          $i++;
+      ?>
+      <article id="<?php echo ereg_replace("[^A-Za-z0-9\-]", "", str_replace(' ', '-', $row['title'])) . '-' . $i; ?>">
+        <div class="body">
+          <h3><?php echo $row['date']; ?></h3>
+          <blockquote>
+            <p>&#8220;<?php echo $row['quote']; ?>&#8221;</p>
+          </blockquote>
+        </div>
+        <div class="graphic">
+          <?php $image = wp_get_attachment_image_src($row['graphic'], 'press'); ?>
+          <img src="<?php echo $image[0]; ?>" alt="<?php the_title(); ?>" height="<?php echo $image[2]; ?>" width="<?php echo $image[1]; ?>">
+        </div>
+      </article>
+      <?php
+        }
+      }
+      ?>
+    </div>
+  </div>
+</article>
