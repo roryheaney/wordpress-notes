@@ -1,0 +1,75 @@
+// Modified http://paulirish.com/2009/markup-based-unobtrusive-comprehensive-dom-ready-execution/
+// Only fires on body class (working off strictly WordPress body_class)
+
+var RENPS = {
+  // All pages
+  common: {
+    init: function() {
+      // JS here
+        //Instantiate UI Datepicker
+        $("#checkin, #checkout").datepicker({
+          showOn: "both",
+            clickInput: true,
+            minDate: +0,
+            dateFormat: "mm-dd-yy"
+        });
+    },
+    finalize: function() { }
+  },
+  // Home page
+  home: {
+    init: function() {
+      // JS here
+          $("#splash").zAccordion({
+            timeout: 4500,
+            speed: 500,
+            slideClass: 'slide',
+            animationStart: function () {
+              $('#splash').find('li.slide-previous div').fadeOut();
+            },
+            animationComplete: function () {
+              $('#splash').find('li.slide-open div').fadeIn();
+            },
+            buildComplete: function () {
+              $('#splash').find('li.slide-closed div').css('display', 'none');
+              $('#splash').find('li.slide-open div').fadeIn();
+            },
+            startingSlide: 0,
+            tabWidth: "12%",
+            width: "100%",
+            height: 630
+          });
+    }
+  },
+  // About page
+  sub: {
+    init: function() {
+      // JS here
+        $("aside .title").next("aside .wysiwg-con").hide();
+      $("aside .title").click(function() {
+        $('aside .title.active').not(this).toggleClass('active').next('aside .wysiwg-con').slideToggle(500);
+        $(this).toggleClass('active').next().slideToggle(500);
+      });
+    }
+  }
+};
+
+var UTIL = {
+  fire: function(func, funcname, args) {
+    var namespace = RENPS;
+    funcname = (funcname === undefined) ? 'init' : funcname;
+    if (func !== '' && namespace[func] && typeof namespace[func][funcname] === 'function') {
+      namespace[func][funcname](args);
+    }
+  },
+  loadEvents: function() {
+
+    UTIL.fire('common', 'finalize');
+
+     $.each(document.body.className.replace(/-/g, '_').split(/\s+/),function(i,classnm) {
+      UTIL.fire(classnm);
+    });
+  }
+};
+
+$(document).ready(UTIL.loadEvents);
