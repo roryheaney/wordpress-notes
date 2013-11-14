@@ -41,7 +41,7 @@ var RENPS = {
           });
     }
   },
-  // About page
+  // Sub pages
   sub: {
     init: function() {
       // JS here
